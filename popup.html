@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/icon/logo.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chrome Extension + Vanilla + JS + Vite</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">Sybau!<sup>V1</sup></div>
+        <button class="menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+      <div class="status-section">
+        <div class="status-text">STATUS: <span id="statusText">ON</span></div>
+        <div class="toggle-switch" id="toggleSwitch">
+          <div class="toggle-circle"></div>
+        </div>
+      </div>
+
+      <div class="stats-section">
+        <div class="stat-item">
+          <div class="stat-label">Cyberbullying Text</div>
+          <div class="stat-number">100</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Normal Text</div>
+          <div class="stat-number">50</div>
+        </div>
+      </div>
+
+      <div class="watching-section">
+        <div class="watching-title">NOW WATCHING</div>
+        <div class="platform-name">Title of Platform</div>
+        <div class="platform-url">https://x.com/home</div>
+      </div>
+
+      <div class="mode-section">
+        <div class="mode-title">Mode</div>
+        <div class="mode-options">
+          <div class="mode-option" data-mode="blur">
+            <div class="checkbox checked" id="blurCheck"></div>
+            <div class="mode-label">Blur</div>
+          </div>
+          <div class="mode-option" data-mode="warning">
+            <div class="checkbox" id="warningCheck"></div>
+            <div class="mode-label">Warning</div>
+          </div>
+          <div class="mode-option" data-mode="hide">
+            <div class="checkbox" id="hideCheck"></div>
+            <div class="mode-label">Hide</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/popup/index.js"></script>
+  </body>
+</html>
