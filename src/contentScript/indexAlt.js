@@ -4,8 +4,8 @@ console.log('🚀 BULLYING DETECTOR STARTING...')
 // CONFIGURATION
 // ============================================
 const CONFIG = {
-  API_URL: 'https://28025fb4c0f5.ngrok-free.app',
-  BATCH_DELAY: 1000, // Increased delay for better batching
+  API_URL: 'https://846afcb07424.ngrok-free.app/',
+  BATCH_DELAY: 2000, // Increased delay for better batching
   DEBUG_MODE: true,
   OBSERVER_OPTIONS: {
     rootMargin: '100px',
@@ -22,12 +22,12 @@ class BullyingDetector {
   constructor(apiUrl) {
     console.log('🔧 Initializing BullyingDetector...')
     this.apiUrl = apiUrl
-    
+
     // Twitter-specific selectors for tweet text
     this.tweetSelectors = [
-      '[data-testid="tweetText"]',           // Main tweet text
-      'div[lang]',                            // Tweet content divs with lang attribute
-      'article div[dir="auto"]',              // Auto-direction divs in articles
+      '[data-testid="tweetText"]', // Main tweet text
+      'div[lang]', // Tweet content divs with lang attribute
+      'article div[dir="auto"]', // Auto-direction divs in articles
     ]
 
     this.pendingElements = new Map()
@@ -164,7 +164,7 @@ class BullyingDetector {
 
     // Start intersection observer for visible tweets
     this.startIntersectionObserver()
-    
+
     // Start mutation observer for dynamically loaded tweets
     this.startMutationObserver()
 
@@ -177,7 +177,7 @@ class BullyingDetector {
   startIntersectionObserver() {
     this.intersectionObserver = new IntersectionObserver(
       (entries) => this.handleIntersection(entries),
-      CONFIG.OBSERVER_OPTIONS
+      CONFIG.OBSERVER_OPTIONS,
     )
   }
 
@@ -187,15 +187,16 @@ class BullyingDetector {
 
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) { // Element node
+          if (node.nodeType === 1) {
+            // Element node
             // Check if node itself is a tweet element
             this.findAndObserveTweets(node)
-            
+
             // Check children for tweet elements
             if (node.querySelectorAll) {
-              this.tweetSelectors.forEach(selector => {
+              this.tweetSelectors.forEach((selector) => {
                 const elements = node.querySelectorAll(selector)
-                elements.forEach(el => {
+                elements.forEach((el) => {
                   if (this.shouldProcessElement(el)) {
                     this.intersectionObserver.observe(el)
                     newTweetsFound = true
@@ -236,7 +237,7 @@ class BullyingDetector {
   }
 
   findAndObserveTweets(node) {
-    this.tweetSelectors.forEach(selector => {
+    this.tweetSelectors.forEach((selector) => {
       if (node.matches && node.matches(selector)) {
         if (this.shouldProcessElement(node)) {
           this.intersectionObserver.observe(node)
@@ -270,7 +271,7 @@ class BullyingDetector {
         if (!this.pendingElements.has(element)) {
           // IMMEDIATELY BLUR while processing
           element.classList.add('sybau-checking')
-          
+
           this.pendingElements.set(element, {
             element: element,
             text: text,
@@ -319,7 +320,7 @@ class BullyingDetector {
     if (this.debugMode) {
       console.log(`⏱️ Batch timer set (${this.batchDelay}ms)`)
     }
-    
+
     this.batchTimer = setTimeout(() => {
       this.processBatch()
     }, this.batchDelay)
@@ -424,22 +425,20 @@ class BullyingDetector {
         }
 
         console.log(
-          `🚨 BULLYING DETECTED (STAYS BLURRED): "${result.text.substring(0, 50)}..." (${Math.round(result.confidence * 100)}%)`
+          `🚨 BULLYING DETECTED (STAYS BLURRED): "${result.text.substring(0, 50)}..." (${Math.round(result.confidence * 100)}%)`,
         )
       } else {
         // NOT BULLYING: Remove blur smoothly
         element.classList.add('sybau-safe')
-        
-        console.log(
-          `✅ SAFE CONTENT (UNBLURRED): "${result.text.substring(0, 50)}..."`
-        )
+
+        console.log(`✅ SAFE CONTENT (UNBLURRED): "${result.text.substring(0, 50)}..."`)
       }
     })
   }
 
   generateElementId(element) {
     if (element.id) return element.id
-    
+
     // Generate unique ID and set it
     const id = `sybau_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     element.setAttribute('data-sybau-id', id)
@@ -496,16 +495,36 @@ function initDetector() {
 
   try {
     detector = new BullyingDetector(CONFIG.API_URL)
-    
+
     // Wait a bit for Twitter to load initial content
     setTimeout(() => {
       detector.start()
       console.log('✅ Detector started successfully!')
     }, 2000)
-    
   } catch (error) {
     console.error('❌ Init error:', error)
   }
+}
+
+async function getTrends() {
+  // const response = await fetch('https://63e0e5ac4c05.ngrok-free.app/trends/today')
+  const response = await fetch(`https://846afcb07424.ngrok-free.app/trends/today`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // body: JSON.stringify(requestBody),
+  })
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+
+  const data = await response.json()
+  // console.log(data)
+
+  // localStorage.setItem('non_bully', data.data.non_bullying_count);
+  // localStorage.setItem('bully', data.data.bullying_count);
 }
 
 // Start when DOM ready
@@ -513,10 +532,12 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     console.log('📄 DOM loaded')
     initDetector()
+    // getTrends()
   })
 } else {
   console.log('📄 DOM already ready')
   initDetector()
+  // getTrends()
 }
 
 // Expose to window
@@ -529,7 +550,7 @@ window.bullyingDetector = {
       console.log('🔄 Rescanning...')
       detector.scanExistingTweets()
     }
-  }
+  },
 }
 
 console.log('💡 Access via: window.bullyingDetector')

@@ -17,31 +17,38 @@
         </button>
       </div>
 
-      <div class="status-section">
+      <!-- <div class="status-section">
         <div class="status-text">STATUS: <span id="statusText">ON</span></div>
         <div class="toggle-switch" id="toggleSwitch">
           <div class="toggle-circle"></div>
         </div>
+      </div> -->
+
+      <div class="watching-section">
+        <div class="watching-title">NOW WATCHING</div>
+        <div class="platform-name">Title of Platform</div>
+        <div class="platform-url">URL of Platform</div>
       </div>
 
       <div class="stats-section">
         <div class="stat-item">
           <div class="stat-label">Cyberbullying Text</div>
-          <div class="stat-number">100</div>
+          <div class="stat-number bully-text-count">0</div>
         </div>
         <div class="stat-item">
           <div class="stat-label">Normal Text</div>
-          <div class="stat-number">50</div>
+          <div class="stat-number normal-text-count">0</div>
         </div>
       </div>
 
-      <div class="watching-section">
-        <div class="watching-title">NOW WATCHING</div>
-        <div class="platform-name">Title of Platform</div>
-        <div class="platform-url">https://x.com/home</div>
+      <div class="chart-section">
+        <canvas id="trendChart" width="300" height="200"></canvas>
       </div>
+      
 
-      <div class="mode-section">
+
+
+      <!-- <div class="mode-section">
         <div class="mode-title">Mode</div>
         <div class="mode-options">
           <div class="mode-option" data-mode="blur">
@@ -57,7 +64,7 @@
             <div class="mode-label">Hide</div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <script type="module" src="/src/popup/index.js"></script>
   </body>
